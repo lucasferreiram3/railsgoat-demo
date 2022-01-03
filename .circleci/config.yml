@@ -12,7 +12,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: circleci/ruby:2.6.3-stretch-node
+      - image: circleci/ruby:2.6.5
     executor: ruby/default
     steps:
       - checkout
@@ -20,7 +20,7 @@ jobs:
           name: Which bundler?
           command: |
             bundle -v
-            bundle update --bundler
+
             bundle install --without development test
             bundle update veracode
       - ruby/bundle-install
