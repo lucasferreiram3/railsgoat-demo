@@ -28,9 +28,33 @@ jobs:
           name: build rails
           command: |
             veracode prepare -v
-            ls -lah
-            ls -lah | grep '.zip'
-  
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - tmp
+            - ./
+  veracode_sast_sandbox_scan:
+    docker:
+      - image: veracode/api-wrapper-java:latest
+    working_directory: ~/tmp
+    steps:
+      - attach_workspace:
+          at: ./
+      - run:
+          name: "Run Veracode SAST Sandbox Scan"
+          command: java -jar /opt/veracode/api-wrapper.jar 
+              -vid $VID
+              -vkey $VKEY
+              -action uploadandscan 
+              -appname "railsgoat-demo"
+              -createprofile false
+              -version CircleCI-$CIRCLE_JOB-$CIRCLE_BUILD_NUM 
+              -filepath ./tmp/'*.zip'
+              -createsandbox true 
+              -sandboxname "SANDBOX_1" 
+              -deleteincompletescan true 
+              -scanpollinginterval 60
+              -scantimeout 60
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
