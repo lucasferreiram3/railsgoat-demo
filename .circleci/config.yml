@@ -49,7 +49,7 @@ jobs:
               -appname "railsgoat-demo"
               -createprofile false
               -version CircleCI-$CIRCLE_JOB-$CIRCLE_BUILD_NUM 
-              -filepath ./tmp/'*.zip'
+              -filepath "./tmp/.zip$"
               -createsandbox true 
               -sandboxname "SANDBOX_1" 
               -deleteincompletescan true 
