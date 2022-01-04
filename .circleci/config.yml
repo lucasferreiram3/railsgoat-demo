@@ -35,7 +35,7 @@ jobs:
             - ./
   veracode_sca:
     docker:
-      - image: circleci/ruby:2.6.5
+      - image: circleci/ruby:2.6.5 
     working_directory: ./
     steps:
       - attach_workspace:
