@@ -39,7 +39,7 @@ jobs:
     working_directory: ~/tmp
     steps:
       - attach_workspace:
-          at: ./tmp
+          at: ./
       - run:
           name: "Run Veracode SAST Sandbox Scan"
           command: |
@@ -52,7 +52,7 @@ jobs:
               -appname "railsgoat-demo"
               -createprofile false
               -version CircleCI-$CIRCLE_JOB-$CIRCLE_BUILD_NUM 
-              -filepath '**/**.zip'
+              -filepath **/**.zip
               -createsandbox true 
               -sandboxname "SANDBOX_1" 
               -deleteincompletescan true 
