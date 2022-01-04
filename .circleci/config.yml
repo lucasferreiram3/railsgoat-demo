@@ -33,28 +33,18 @@ jobs:
           paths:
             - tmp
             - ./
-  veracode_sast_sandbox_scan:
+  veracode_sca:
     docker:
-      - image: veracode/api-wrapper-java:latest
-    working_directory: ~/tmp
+      - image: circleci/ruby:2.6.5
+    working_directory: ./
     steps:
       - attach_workspace:
           at: ./
       - run:
-          name: "Run Veracode SAST Sandbox Scan"
-          command: java -jar /opt/veracode/api-wrapper.jar 
-              -vid $VID
-              -vkey $VKEY
-              -action uploadandscan 
-              -appname "railsgoat-demo"
-              -createprofile false
-              -version CircleCI-$CIRCLE_JOB-$CIRCLE_BUILD_NUM 
-              -filepath tmp/
-              -createsandbox true 
-              -sandboxname "SANDBOX_1" 
-              -deleteincompletescan true 
-              -scanpollinginterval 60
-              -scantimeout 60
+          name: "Veracode Software Composition Analysis"
+          command: |
+            export EXTRA_ARGS='--update-advisor'
+            curl -sSL https://download.sourceclear.com/ci.sh | bash -s – scan $EXTRA_ARGS || true
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -63,6 +53,6 @@ workflows:
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build
-      - veracode_sast_sandbox_scan:
+      - veracode_sca:
           requires:
             - build
