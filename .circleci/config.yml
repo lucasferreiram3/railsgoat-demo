@@ -55,4 +55,6 @@ workflows:
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build
-      - veracode_sast_pipeline_scan
+      - veracode_sast_pipeline_scan:
+            requires:
+              - build
