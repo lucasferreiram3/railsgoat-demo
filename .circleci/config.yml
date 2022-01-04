@@ -27,7 +27,9 @@ jobs:
       - run:
           name: build rails
           command: |
-            veracode prepare -h
+            veracode prepare -v
+            ls -lah
+            ls -lah | grep '.zip'
   
 
 # Invoke jobs via workflows
