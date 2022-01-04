@@ -63,3 +63,6 @@ workflows:
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build
+      - veracode_sast_sandbox_scan:
+          requires:
+            - build
