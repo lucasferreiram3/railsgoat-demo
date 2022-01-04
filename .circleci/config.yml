@@ -38,11 +38,10 @@ jobs:
       - image: circleci/ruby:2.6.5 
     working_directory: ./
     steps:
-      - attach_workspace:
-          at: ./
       - run:
           name: "Veracode Software Composition Analysis"
           command: |
+            ls -lah
             export EXTRA_ARGS='--update-advisor'
             curl -sSL https://download.sourceclear.com/ci.sh | bash -s – scan $EXTRA_ARGS || true
 
@@ -53,6 +52,4 @@ workflows:
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build
-      - veracode_sca:
-          requires:
-            - build
+      - veracode_sca
