@@ -38,6 +38,8 @@ jobs:
       - image: circleci/ruby:2.6.5 
     working_directory: ./
     steps:
+      - attach_workspace:
+          at: ./
       - run:
           name: "Veracode Software Composition Analysis"
           command: |
@@ -52,4 +54,6 @@ workflows:
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build
-      - veracode_sca
+      - veracode_sca:
+          requires:
+           - build
