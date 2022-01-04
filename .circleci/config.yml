@@ -33,19 +33,47 @@ jobs:
           paths:
             - tmp
             - ./
-  veracode_sca:
+  veracode_sast_sandbox_scan:
     docker:
-      - image: circleci/ruby:2.6.5 
-    working_directory: ./
+      - image: veracode/api-wrapper-java:latest
+    working_directory: ~/tmp
     steps:
       - attach_workspace:
           at: ./
       - run:
-          name: "Veracode Software Composition Analysis"
-          command: |
-            ls -lah
-            export EXTRA_ARGS='--update-advisor'
-            curl -sSL https://download.sourceclear.com/ci.sh | bash -s – scan $EXTRA_ARGS || true
+          name: "Run Veracode SAST Sandbox Scan"
+          command: java -jar /opt/veracode/api-wrapper.jar 
+              -vid $VID
+              -vkey $VKEY
+              -action uploadandscan 
+              -appname "railsgoat-demo"
+              -createprofile false
+              -version CircleCI-$CIRCLE_JOB-$CIRCLE_BUILD_NUM 
+              -filepath tmp/
+              -createsandbox false
+              -sandboxname "SANDBOX_1" 
+              -deleteincompletescan true 
+
+  veracode_sast_policy_scan:
+    docker:
+      - image: veracode/api-wrapper-java:latest
+    working_directory: ~/tmp
+    steps:
+      - attach_workspace:
+          at: ./
+      - run:
+          name: "Run Veracode SAST Sandbox Scan"
+          command: java -jar /opt/veracode/api-wrapper.jar 
+              -vid $VID
+              -vkey $VKEY
+              -action uploadandscan 
+              -appname "railsgoat-demo"
+              -createprofile false
+              -version CircleCI-$CIRCLE_JOB-$CIRCLE_BUILD_NUM 
+              -filepath tmp/ 
+              -deleteincompletescan true 
+              -scanpollinginterval 60
+              -scantimeout 60
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -54,6 +82,9 @@ workflows:
     # Inside the workflow, you define the jobs you want to run.
     jobs:
       - build
-      - veracode_sca:
+      -  veracode_sast_sandbox_scan:
           requires:
            - build
+      -  veracode_sast_policy_scan:
+          requires:
+            - build
