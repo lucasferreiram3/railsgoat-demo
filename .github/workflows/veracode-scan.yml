@@ -1,0 +1,19 @@
+name: veracode-scan
+on:
+  push:
+    branches: [feature-1]
+
+jobs:
+  build:
+  runs-on: ubuntu-latest
+  container:
+    image: ruby:2.6.5
+    options: --user root
+  steps:
+    - name:
+      uses: actions/checkout@master
+
+    - name: install gems
+      run : |
+        bundle -v
+ 
