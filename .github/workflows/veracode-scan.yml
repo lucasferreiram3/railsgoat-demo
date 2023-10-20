@@ -5,15 +5,15 @@ on:
 
 jobs:
   build:
-  runs-on: ubuntu-latest
-  container:
-    image: ruby:2.6.5
-    options: --user root
-  steps:
-    - name:
-      uses: actions/checkout@master
+    runs-on: ubuntu-latest
+    container:
+      image: ruby:2.6.5
+      options: --user root
+    steps:
+      - name:
+        uses: actions/checkout@master
 
-    - name: install gems
-      run : |
-        bundle -v
+      - name: install gems
+        run : |
+          bundle -v
  
