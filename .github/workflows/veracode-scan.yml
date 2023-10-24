@@ -16,17 +16,6 @@ jobs:
       - name: install gems
         run : |
           bundle install --without development test
-      
-      - name: packaging to veracode scan
-        run : |
-           bundle update veracode
-           veracode prepare -v
-
-      - name: publishing artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: veracode-package
-          path: tmp
 
   veracode-sca:
     runs-on: ubuntu-latest
@@ -56,7 +45,12 @@ jobs:
         with:
           name: veracode-package
           
+      - name: packaging to veracode scan
+        run : |
+           bundle update veracode
+           veracode prepare -v
+
       - name: scan 
         run: |
-          UPLOAD=$(ls | grep "zip")
-          java -jar /opt/veracode/pipeline-scan.jar -vid "${{ secrets.VID }}" -vkey "${{ secrets.VKEY }}" -f . -p "RailsGoat-Demo"
+          ls -l
+          java -jar /opt/veracode/pipeline-scan.jar -vid "${{ secrets.VID }}" -vkey "${{ secrets.VKEY }}" -f tmp/ -p "RailsGoat-Demo"
