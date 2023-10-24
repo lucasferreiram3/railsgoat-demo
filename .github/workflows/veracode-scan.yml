@@ -16,6 +16,17 @@ jobs:
       - name: install gems
         run : |
           bundle install --without development test
+      
+      - name: packaging to veracode scan
+        run : |
+           bundle update veracode
+           veracode prepare -v
+
+      - name: publishing artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: veracode-package
+          path: .
 
   veracode-sca:
     runs-on: ubuntu-latest
@@ -45,11 +56,6 @@ jobs:
         with:
           name: veracode-package
           
-      - name: packaging to veracode scan
-        run : |
-           bundle update veracode
-           veracode prepare -v
-
       - name: scan 
         run: |
           ls -l
