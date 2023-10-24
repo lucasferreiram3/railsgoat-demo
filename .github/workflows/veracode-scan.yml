@@ -58,5 +58,5 @@ jobs:
           
       - name: scan 
         run: |
-          ls -l
-          java -jar /opt/veracode/pipeline-scan.jar -vid "${{ secrets.VID }}" -vkey "${{ secrets.VKEY }}" -f "*.zip" -p "RailsGoat-Demo" -pn "Veracode Recommended Medium"
+          mkdir uploadToVeracode; cp -r . uploadToVeracode/
+          java -jar /opt/veracode/pipeline-scan.jar -vid "${{ secrets.VID }}" -vkey "${{ secrets.VKEY }}" -f uploadToVeracode/ -p "RailsGoat-Demo" -pn "Veracode Recommended Medium"
