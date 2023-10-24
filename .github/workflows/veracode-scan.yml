@@ -26,7 +26,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: veracode-package
-          path: tmp
+          path: ~/tmp
 
   veracode-sca:
     runs-on: ubuntu-latest
@@ -58,4 +58,5 @@ jobs:
           
       - name: scan 
         run: |
+          ls -l
           java -jar /opt/veracode/pipeline-scan.jar -vid "${{ secrets.VID }}" -vkey "${{ secrets.VKEY }}" -f tmp/ -p "RailsGoat-Demo" -pn "Veracode Recommended Medium"
