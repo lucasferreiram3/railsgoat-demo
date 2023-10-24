@@ -59,4 +59,4 @@ jobs:
       - name: scan 
         run: |
           UPLOAD=$(ls | grep "zip")
-          java -jar /opt/veracode/pipeline-scan.jar -vid "${{ secrets.VID }}" -vkey "${{ secrets.VKEY }}" -f $UPLOAD -p "RailsGoat-Demo" -pn "Veracode Recommended Medium"
+          java -jar /opt/veracode/pipeline-scan.jar -vid "${{ secrets.VID }}" -vkey "${{ secrets.VKEY }}" -f . -p "RailsGoat-Demo"
