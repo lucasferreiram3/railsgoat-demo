@@ -15,5 +15,31 @@ jobs:
 
       - name: install gems
         run : |
-          bundle -v
- 
+          bundle install --without development test
+      
+      - name: packaging to veracode scan
+        run : |
+          bundle update veracode
+           veracode prepare -v
+
+      - name: publishing artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: veracode-package
+          path: tmp
+
+  veracode-sca:
+    runs-on: ubuntu-latest
+    container:
+      image: ruby:2.6.5
+      options: --user root
+    steps:
+      - name: checkout
+        uses: actions/checkout@master
+
+      - name: sca agent-based scan
+        run: |
+          export EXTRA_ARGS='--update-advisor --uri-as-name'
+          curl -sSL https://download.sourceclear.com/ci.sh | bash -s scan $EXTRA_ARGS
+
+    
