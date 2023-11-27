@@ -13,20 +13,11 @@ jobs:
       - name: checkout
         uses: actions/checkout@master
 
-      - name: install gems
-        run : |
-          bundle install --without development test
-      
-      - name: packaging to veracode scan
-        run : |
-           bundle update veracode
-           veracode prepare -v
-
       - name: publishing artifact
         uses: actions/upload-artifact@v2
         with:
           name: veracode-package
-          path: ~/tmp
+          path: tmp
 
   veracode-sca:
     runs-on: ubuntu-latest
@@ -81,4 +72,4 @@ jobs:
       - name: scan 
         run: |
           ls -l
-          java -jar /opt/veracode/pipeline-scan.jar -vid "${{ secrets.VID }}" -vkey "${{ secrets.VKEY }}" -f "tmp/*.zip" -p "RailsGoat-Demo"
+          java -jar /opt/veracode/pipeline-scan.jar -vid "${{ secrets.VID }}" -vkey "${{ secrets.VKEY }}" -f "tmp" -p "RailsGoat-Demo"
