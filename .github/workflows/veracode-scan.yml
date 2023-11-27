@@ -26,7 +26,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: veracode-package
-          path: .
+          path: ~/tmp
 
   veracode-sca:
     runs-on: ubuntu-latest
