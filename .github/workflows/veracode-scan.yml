@@ -62,7 +62,7 @@ jobs:
         with:
           appname: 'railsgoat-demo'
           createprofile: false
-          filepath: 'tmp/'
+          filepath: '.'
           vid: '${{ secrets.VID }}'
           vkey: '${{ secrets.VKEY }}'
 
@@ -81,4 +81,4 @@ jobs:
       - name: scan 
         run: |
           ls -l
-          java -jar /opt/veracode/pipeline-scan.jar -vid "${{ secrets.VID }}" -vkey "${{ secrets.VKEY }}" -f "tmp" -p "RailsGoat-Demo"
+          java -jar /opt/veracode/pipeline-scan.jar -vid "${{ secrets.VID }}" -vkey "${{ secrets.VKEY }}" -f . -p "RailsGoat-Demo"
