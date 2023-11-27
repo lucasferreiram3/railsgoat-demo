@@ -12,7 +12,16 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@master
-
+      
+      - name: install gems
+        run : |
+          bundle install --without development test
+      
+      - name: packaging to veracode scan
+        run : |
+           bundle update veracode
+           veracode prepare -v
+     
       - name: publishing artifact
         uses: actions/upload-artifact@v2
         with:
