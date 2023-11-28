@@ -33,6 +33,7 @@ jobs:
           path: tmp/
 
   veracode-sca:
+    name: SCA agent-based
     runs-on: ubuntu-latest
     container:
       image: ruby:2.6.5
@@ -48,8 +49,8 @@ jobs:
           export EXTRA_ARGS='--update-advisor --uri-as-name'
           curl -sSL https://download.sourceclear.com/ci.sh | bash -s scan $EXTRA_ARGS
 
-  veracode_static_analysis:
-    name: Static Analysis
+  veracode_static_analysis_policy:
+    name: SAST Policy Scan
     runs-on: ubuntu-latest
     needs: [build]
     steps:
@@ -72,6 +73,7 @@ jobs:
           deleteincompletescan: 2
 
   veracode-sast-pipeline-scan:
+    name: SAST Pipeline Scan
     runs-on: ubuntu-latest
     needs: [build]
     container:
@@ -83,10 +85,7 @@ jobs:
         with:
           name: veracode-package
           
-      - name: pipeline-scan action step
-        id: pipeline-scan
-        uses: veracode/Veracode-pipeline-scan-action@v1.0.10
-        with:
-          vid: ${{ secrets.VID }}
-          vkey: ${{ secrets.VKEY }}
-          file: "veracode-artifact.zip" 
+      - name: scan 
+        run: |
+          ls -l
+          java -jar /opt/veracode/pipeline-scan.jar -vid "${{ secrets.VID }}" -vkey "${{ secrets.VKEY }}" -f veracode-artifact.zip -p "RailsGoat-Demo"
