@@ -21,12 +21,16 @@ jobs:
         run : |
            bundle update veracode
            veracode prepare -v
+      
+      - name: rename file packaged
+        run : |
+            mv tmp/* tmp/veracode-artifact.zip
      
       - name: publishing artifact
         uses: actions/upload-artifact@v2
         with:
           name: veracode-package
-          path: tmp
+          path: tmp/
 
   veracode-sca:
     runs-on: ubuntu-latest
@@ -62,7 +66,7 @@ jobs:
         with:
           appname: 'railsgoat-demo'
           createprofile: false
-          filepath: '.'
+          filepath: 'veracode-artifact.zip'
           vid: '${{ secrets.VID }}'
           vkey: '${{ secrets.VKEY }}'
 
@@ -81,4 +85,4 @@ jobs:
       - name: scan 
         run: |
           ls -l
-          java -jar /opt/veracode/pipeline-scan.jar -vid "${{ secrets.VID }}" -vkey "${{ secrets.VKEY }}" -f . -p "RailsGoat-Demo"
+          java -jar /opt/veracode/pipeline-scan.jar -vid "${{ secrets.VID }}" -vkey "${{ secrets.VKEY }}" -f veracode-artifact.zip -p "RailsGoat-Demo"
