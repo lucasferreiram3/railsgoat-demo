@@ -71,7 +71,7 @@ jobs:
           vid: '${{ secrets.VID }}'
           vkey: '${{ secrets.VKEY }}'
           createsandbox: 'true'
-          sandboxname: '${{ github.head_ref }}'
+          sandboxname: 'dev'
           deleteincompletescan: 2
 
   veracode_static_analysis_policy:
